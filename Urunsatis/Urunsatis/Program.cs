@@ -16,7 +16,14 @@ namespace Urunsatis
 
         static void Main(string[] args)
         {
-            urun_ekle();
+            Console.Write(" ---- URUN TAKİP SİSTEMİNE HOŞGELDİNİZ ---- \n :: Yapmak istediğiniz işlemi seçiniz ::");
+            Console.Write("\n 1) Ürunleri Göster \n 2) Ürün Ekleme Yap\n işlem Yap :");
+            int secim = Convert.ToInt32(Console.ReadLine());
+            if (secim == 1)
+                urun_getir();
+            else
+                urun_ekle();
+
             Console.ReadKey();
         }
 
@@ -30,14 +37,16 @@ namespace Urunsatis
                 SqlDataReader oku = komut.ExecuteReader();
                 while (oku.Read())
                 {
-                    Console.WriteLine("Urun No : " + oku["id"].ToString() + "\nUrun Adı : " + oku["urun_adi"].ToString() + "\nUrun Kategori : " + oku["urun_kategori"].ToString()+"\nUrun Fiyat : "+oku["urun_fiyat"].ToString());
+                    
+                    Console.WriteLine("\nUrun No : " + oku["id"].ToString() + "\nUrun Adı : " + oku["urun_adi"].ToString() + "\nUrun Kategori : " + oku["urun_kategori"].ToString()+"\nUrun Fiyat : "+oku["urun_fiyat"].ToString());
                     if (oku["urun_durum"].ToString() == "satildi")
                     {
                         Console.WriteLine("Durum : Satıldı"+"\nSatılan Kişi : "+oku["satilan_kisi"].ToString());
-
+                        
                     }
                     else
                         Console.WriteLine("Durum : Aktif - Henüz Satılmadı");
+                    
                 }
                 oku.Close();
                 baglanti.Close();               
@@ -72,10 +81,7 @@ namespace Urunsatis
             catch
             {
                 Console.WriteLine("Veri Girilemedi Bağlantıda bir Problem olabilir.");
-            }
-
-                
-            
+            } 
         }
 
 
