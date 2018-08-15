@@ -12,9 +12,11 @@ namespace Urunsatis
     class Program
     {
         public static string veribag = "data source=.;initial catalog=veri;integrated security=true";
+        public static SqlConnection baglanti = new SqlConnection(veribag);
+
         static void Main(string[] args)
         {
-            urun_getir();
+            urun_ekle();
             Console.ReadKey();
         }
 
@@ -22,7 +24,7 @@ namespace Urunsatis
         {          
             try
             {
-                SqlConnection baglanti = new SqlConnection(veribag);
+                
                 SqlCommand komut = new SqlCommand("Select * from urunler", baglanti);
                 baglanti.Open();
                 SqlDataReader oku = komut.ExecuteReader();
@@ -46,7 +48,35 @@ namespace Urunsatis
             }
         }
 
+        static void urun_ekle()
+        {
+            try
+            {
+                baglanti.Open();
+                SqlCommand komut = new SqlCommand("insert into urunler(urun_adi,urun_kategori,urun_fiyat,satilan_kisi,urun_durum)values(@urun_adi,@urun_kategori,@urun_fiyat,@satilan_kisi,@urun_durum)", baglanti);
+                komut.Parameters.AddWithValue("@urun_adi", Console.ReadLine());
+                komut.Parameters.AddWithValue("@urun_kategori", Console.ReadLine());
+                komut.Parameters.AddWithValue("@urun_fiyat", Console.ReadLine());
+                komut.Parameters.AddWithValue("@satilan_kisi", Console.ReadLine());
+                Console.Write("Urun Durumu(satildi/satilmadi yazınız) : ");
+                string durum = Console.ReadLine();
+                if (durum == "satildi" || durum == "satilmadi" || durum=="")
+                    komut.Parameters.AddWithValue("@urun_durum", durum);
+                else
+                    Console.WriteLine("Kaydedilemedi Yanlış İşlem Yaptınız..!");
+                
+                komut.ExecuteNonQuery();
+                baglanti.Close();
+                Console.WriteLine("---KAYIT BAŞARIYLA YAPILDI...!!!---");
+            }
+            catch
+            {
+                Console.WriteLine("Veri Girilemedi Bağlantıda bir Problem olabilir.");
+            }
 
+                
+            
+        }
 
 
     }
